@@ -1,9 +1,15 @@
 #include "window.h"
 #include <SDL2/SDL2_gfxPrimitives.h>
 
-void window_init(Window *window, int32_t width, int32_t height, char *title) {
-	window->width = width;
-	window->height = height;
+struct Window {
+	int32_t width;
+	int32_t height;
+	SDL_Renderer *renderer;
+	SDL_Window *window;
+};
+
+Window* window_init(int32_t width, int32_t height, char *title) {
+	Window* window = malloc(sizeof(Window));
 	window->window = SDL_CreateWindow(title, 0, 0, width, height, SDL_WINDOW_SHOWN);
 	if (window->window == NULL) {
 		printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
@@ -13,7 +19,9 @@ void window_init(Window *window, int32_t width, int32_t height, char *title) {
 		printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
 		SDL_Quit();
 	}
+	return window;
 }
+
 void window_draw_circle(Window *window, int32_t x, int32_t y, int32_t rad, int32_t r, int32_t g, int32_t b)
 {
 	filledCircleRGBA(window->renderer, x, y, rad, r, g, b, 255);
